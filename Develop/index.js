@@ -1,13 +1,17 @@
 // create a variable and require
-
-const inquirer = require('inquirer');
-const fs = require('fs');
+const fs = require( 'fs' );
+const util = require('util');
+const inquirer = require( 'inquirer' );
+const apiCall = require("./utils/api");
 const generateMarkdown = require("./utils/generateMarkdown");
-const api = require("./utils/api")
+const writeFileAsync = util.promisify(fs.writeFile); 
 
-// create questions array
-// copy and paste type, name , message add question inquirer
-const questions = [
+
+
+// create inquirer prompt
+function promptUser(){
+return inquirer.prompt
+([
     {
         type: 'input',
         name: 'askProjectName',
@@ -20,52 +24,76 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'askProjectName',
-        message: 'Enter a project title?'
+        name: 'askProjectDescription',
+        message: 'Give a description of your project.'
     },
     {
         type: 'input',
-        name: 'askProjectName',
-        message: 'Enter a project title?'
+        name: 'askProjectTableOfContents',
+        message: `What is your project's Table of Contents if any?`
     },
     {
         type: 'input',
-        name: 'askProjectName',
-        message: 'Enter a project title?'
+        name: 'askProjectHomepage',
+        message: 'What is the URL address of your Demo?'
     },
+    {
+        type: 'list',
+        name: 'askLicenseName',
+        message: 'Choose your license.',
+        choices: [
+            "Apache License 2.0",
+            "Academic Free License v3.0",
+            "GNU General Public License v3.0",
+            "ISC",
+            "MIT License",
+            "Mozilla Public License 2.0",
+            "Open Software License 3.0",
+            "The Unlicense"
+        ]
+    },
+    {
+        type: 'input',
+        name: 'askContributingUrl',
+        message: 'Who are contributors and their URL?'
+    },
+    {
+        type: 'input',
+        name: 'askInstallCommand',
+        message: 'What are the installation instructions?'
+    }, 
+    {
+        type: 'input',
+        name: 'askUsage',
+        message: 'How do users use this project?'
+    }, 
+    {
+        type: 'input',
+        name: 'tests',
+        message: 'Is Testing included?'
+    },
+ 
 
-    // 'askProjectVersion',
-    // 'askProjectDescription',
-    // 'askProjectHomepage',
-    // 'askProjectDemoUrl',
-    // 'askAuthorName',
-    // 'askAuthorGithub'
-    // 'askLicenseName',
-    // 'askContributingUrl',
-    // 'askInstallCommand',
-    // 'askUsage',
-    // 'askTestCommand'
+])
+};
+ 
 
-];
-// 
+async function init() {
+try {
+    const answers = await promptUser();
+    const results = await apiCall(answers.gitHubUserName);
+    answers.email = results.email;
+    answers.avatar_url = results.avatar_url;
+    const generateContent = generateMarkdown(answers);
+     
+    console.log(results);
+    await writeFileAsync("README.md", generateContent);
 
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName,data,(error) =>{
-        if (error) throw error;
-        console.log('readme created sucessesfully');
-    })
-}
+    console.log("Successfully wrote to README.md");
+  } catch(error) {
+    console.log(error);
+    };
+ }
+ init();
 
-function init() {
-    inquirer.prompt(questions).then(answers=> {
-        console.log("Answers...", answers);
-    let data = {...answers}
-        const avatarPhoto = api(answers.askGitHubUserName);
-        console.log(avatarPhoto)
-        data.photo = avatarPhoto;
-        const markDown = generateMarkDown (data);
-        writeToFile("README.md", markdown);
-    });
-}
 
-init();
