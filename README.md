@@ -1,9 +1,12 @@
-
+# README Generator
 # 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jerniceduncan/)
 
 ## Description
+Readme Generator was built using node.
 
+## Demo
+![alt text](https://github.com/jerniceduncan/09-README-Generator/blob/master/utils/images/Untitled_%20Jun%203%2C%202020%209_08%20PM.gif)
 
 
 ## Table of Contents 
@@ -29,7 +32,7 @@ npm i
 ```
 
 ## Usage
-
+node index.js
 
 
 ## License
