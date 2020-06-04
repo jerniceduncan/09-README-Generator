@@ -6,7 +6,7 @@
 Readme Generator was built using node.
 
 ## Demo
-![alt text](https://github.com/jerniceduncan/09-README-Generator/blob/master/utils/images/Untitled_%20Jun%203%2C%202020%209_08%20PM.gif)
+![alt text](https://github.com/jerniceduncan/09-README-Generator/blob/master/images/Untitled_%20Jun%203%2C%202020%209_08%20PM%20(1).gif)
 
 
 ## Table of Contents 
